@@ -14,14 +14,14 @@ class ActionHandler {
     constructor(client){
         this.musicManager = MusicManager;
         this.bot = client;
-        this.bot.login(process.env['ALFRED_TEST']);
+        this.bot.login(process.env['ALFRED_TOKEN']);
         this.bot.once('ready', () => {
                 console.log('Ready!');
             });
 
         this.bot.on('message', async message =>{
             if (this.deconflict(message)){
-                this.handle(message);
+                await this.handle(message);
             };
         });
     };
@@ -47,24 +47,24 @@ class ActionHandler {
     }
 
     // handling messages based on content
-    handle(message){
+    async handle(message){
         if (message.content.includes('aplay')){
-            this.musicManager.play(message)
+            await this.musicManager.play(message)
         };
         if (message.content.includes('astop')){
-            this.musicManager.stop(message)
+            await this.musicManager.stop(message)
         };
 
         if (message.content.includes('askip')){
-            this.musicManager.skip(message);
+            await this.musicManager.skip(message);
         };
 
         if (message.content.includes('apause')){
-            this.musicManager.pause();
+            await this.musicManager.pause();
         };
 
         if (message.content.includes('aresume')){
-            this.musicManager.resume();
+            await this.musicManager.resume();
         };
     };
 };

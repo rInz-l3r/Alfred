@@ -17,8 +17,8 @@ RUN apt-get update \
     && apt install -y ffmpeg
 
 
-COPY . .
-RUN python3 -m pip install --no-cache-dir -r requirements.txt \ 
-    && npm install
+COPY . alfred/
+RUN python3 -m pip install --no-cache-dir -r alfred/python/requirements.txt \ 
+    && npm install alfred/src/
 
-CMD ["bash", "alfred.sh"]
+CMD ["bash", "alfred/alfred.sh"]

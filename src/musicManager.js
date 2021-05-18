@@ -70,10 +70,10 @@ async function getTrackName(content){
 // connect to message originating guild channel, play if 200 status from
 // python downloader.
 async function playTrack(message, connection, resp) {
-    console.log(resp)
+    console.log(process.cwd())
     if (resp.status == 200) {
         respJson = await resp.json()
-        dispatcher = connection.play('../python/track');
+        dispatcher = connection.play('../track');
         dispatcher.on('start', () => {
             message.channel.send(`Playing ${respJson['track']}`);
             console.log('Music is Playing');
