@@ -1,0 +1,8 @@
+node_modules
+.DS_Store
+track
+__pycache__/
+.vscode
+config.json
+voice_trans/
+module_stuff/

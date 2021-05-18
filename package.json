@@ -1,0 +1,19 @@
+{
+  "name": "alfredjs",
+  "version": "1.0.0",
+  "description": "Alfred Discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jacob Edmonson",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/opus": "^0.3.2",
+    "discord.js": "^12.3.1",
+    "eslint": "^7.9.0",
+    "ffmpeg-static": "^4.2.7",
+    "opusscript": "0.0.7",
+    "ytdl-core": "^4.0.0"
+  }
+}

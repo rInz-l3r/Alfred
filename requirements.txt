@@ -1,0 +1,7 @@
+bottle==0.12.18
+certifi==2020.6.20
+decorator==4.4.2
+pafy==0.5.5
+six==1.15.0
+validators==0.18.1
+youtube-dl==2020.9.20
