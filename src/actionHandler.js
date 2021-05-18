@@ -14,7 +14,7 @@ class ActionHandler {
     constructor(client){
         this.musicManager = MusicManager;
         this.bot = client;
-        this.bot.login(process.env['ALFRED_TOKEN']);
+        this.bot.login(process.env['ALFRED_TEST']);
         this.bot.once('ready', () => {
                 console.log('Ready!');
             });

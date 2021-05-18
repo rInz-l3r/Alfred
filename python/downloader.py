@@ -5,23 +5,26 @@ from search_youtube import search
 from sys import argv
 
 def download_track(URL):
-    print(f'Getting {URL}')
-    try:
-        os.remove('track')
-    except FileNotFoundError:
-        pass
-    video = pafy.new(URL)
-    best = video.getbest()
     path = os.getcwd()
     path = path.split('/')
     path[len(path)-1] = "track"
-    best.download(filepath='/'.join(path))
+    path = '/'.join(path)
+
+    print(f'Getting {URL}')
+    try:
+        os.remove(path)
+    except FileNotFoundError:
+        pass
+    video = pafy.new(URL)
+    best = video.getbest(path)
+    best.download(filepath=path)
     print(f'{video.title}.{best.extension} downloaded.')
     return video.title
 
 def track_name(URL):
     print(URL)
     video = pafy.new(URL)
+    print(f'{video.title} Queued.')
     return video.title
 
 def search_yt(user_input):
