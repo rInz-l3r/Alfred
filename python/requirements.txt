@@ -1,7 +1,12 @@
-
-certifi==2020.6.20
-decorator==4.4.2
+bottle==0.12.19
+certifi==2020.12.5
+chardet==4.0.0
+decorator==5.0.9
+idna==2.10
 pafy==0.5.5
-six==1.15.0
+requests==2.25.1
+six==1.16.0
+urllib3==1.26.4
 validators==0.18.1
-youtube-dl==2020.9.20
+youtube-dl==2021.5.16
+youtube-search==1.1.0
