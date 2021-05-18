@@ -25,20 +25,15 @@ def track_name():
             response.headers['Content-Type'] = 'application/json'
             return {'track': json.dumps(track_name)}
 
-@post('/alfred/search')
-def search():
-    if 'asearch' in request.json['link']:
-        words = [word for word in request.json['link'].split(' ')]
-        words.remove('asearch')
-        track_list = downloader.search_yt(' '.join(words))
-        response.status = 200
-        response.headers['Content-Type'] = 'application/json'
-        return {'track_list': track_list}
-
-@post('/alfred/demo')
-def demo():
-    print(request.json['link'])
-    response.status = 200
-    return response
+# Disconnected
+# @post('/alfred/search')
+# def search():
+#     if 'asearch' in request.json['link']:
+#         words = [word for word in request.json['link'].split(' ')]
+#         words.remove('asearch')
+#         track_list = downloader.search_yt(' '.join(words))
+#         response.status = 200
+#         response.headers['Content-Type'] = 'application/json'
+#         return {'track_list': track_list}
 
 run(host='localhost', port=8080, reloader=True)
