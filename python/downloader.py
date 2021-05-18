@@ -9,6 +9,7 @@ def download_track(URL):
     path = path.split('/')
     path[len(path)-1] = "track"
     path = '/'.join(path)
+    
 
     print(f'Getting {URL}')
     try:
@@ -16,7 +17,7 @@ def download_track(URL):
     except FileNotFoundError:
         pass
     video = pafy.new(URL)
-    best = video.getbest(path)
+    best = video.getbest()
     best.download(filepath=path)
     print(f'{video.title}.{best.extension} downloaded.')
     return video.title
@@ -24,7 +25,7 @@ def download_track(URL):
 def track_name(URL):
     print(URL)
     video = pafy.new(URL)
-    print(f'{video.title} Queued.')
+    print(f'{video.title} queued.')
     return video.title
 
 def search_yt(user_input):
