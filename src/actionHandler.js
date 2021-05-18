@@ -1,47 +1,72 @@
+const MusicManager = require("./musicManager")
 
 class ActionHandler {
-    #args = ['aplay', 'astop', 'askip', 'apause', 'aresume'];
+    #args = [
+        'aplay', 
+        'astop', 
+        'askip', 
+        'apause', 
+        'aresume'
+        ];
+
     
-    constructor(messageContent, client){
+    // starting bot, getting musicManager
+    constructor(client){
+        this.musicManager = MusicManager;
         this.bot = client;
-        this.valid = this.deconflict(messageContent);
-    }
+        this.bot.login(process.env['ALFRED_TEST']);
+        this.bot.once('ready', () => {
+                console.log('Ready!');
+            });
 
+        this.bot.on('message', async message =>{
+            if (this.deconflict(message)){
+                this.handle(message);
+            };
+        });
+    };
 
-    deconflict(messageContent){
+    // making sure we dont have multiple commands in one message
+    deconflict(message){
         let count = 0;
-        for (const e in this.#args){
-            if (messageContent.includes(this.#args[e])){
-                count++                
-            }
-
-        }
-        if (count > 1){
-            return false;
-        }
-        return true;
+        
+        // removing messages from bot
+        if (message.author.bot != true) {
+            for (const e in this.#args){
+                if (message.content.includes(this.#args[e])){
+                    count++                
+                };
+    
+            };
+            if (count > 1){
+                return false;
+            };
+            return true;
+        };
+        return false;
     }
 
-    handle(messageContent){
-        if (messageContent.includes('aplay')){
-            return 'play'
-        }
-        if (messageContent.includes('astop')){
-            return 'stop'
-        }
+    // handling messages based on content
+    handle(message){
+        if (message.content.includes('aplay')){
+            this.musicManager.play(message)
+        };
+        if (message.content.includes('astop')){
+            this.musicManager.stop(message)
+        };
 
-        if (messageContent.includes('askip')){
-            return 'skip'
-        }
+        if (message.content.includes('askip')){
+            this.musicManager.skip(message);
+        };
 
-        if (messageContent.includes('apause')){
-            return 'pause'
-        }
+        if (message.content.includes('apause')){
+            this.musicManager.pause();
+        };
 
-        if (messageContent.includes('aresume')){
-            return 'resume'
-        }
-    }
+        if (message.content.includes('aresume')){
+            this.musicManager.resume();
+        };
+    };
 };
 
 module.exports = ActionHandler;

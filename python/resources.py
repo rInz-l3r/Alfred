@@ -35,4 +35,10 @@ def search():
         response.headers['Content-Type'] = 'application/json'
         return {'track_list': track_list}
 
+@post('/alfred/demo')
+def demo():
+    print(request.json['link'])
+    response.status = 200
+    return response
+
 run(host='localhost', port=8080, reloader=True)

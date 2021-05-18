@@ -1,6 +1,6 @@
 node_modules
 .DS_Store
 track
-/python/__pycache__/
+__pycache__/
 .vscode
 config.json
