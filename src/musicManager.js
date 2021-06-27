@@ -11,6 +11,7 @@ async function play(message){
         trackName = await getTrackName(message.content)
         musicQueue.push(message);
         message.channel.send(`Adding ${trackName} to the queue.`);
+        console.log(`Adding ${trackName} to the queue.`)
     } else {
         connection = await message.member.voice.channel.join();
         await playTrack(message, connection, await download(message.content))
@@ -25,6 +26,7 @@ async function stop(message){
     connection.disconnect();
     isPlaying = false;
     message.channel.send("Queue Cleared.");
+    console.log("Queue Cleared.")
 };
 
 // skipping track, calling next track
@@ -73,7 +75,7 @@ async function playTrack(message, connection, resp) {
     console.log(process.cwd())
     if (resp.status == 200) {
         respJson = await resp.json()
-        dispatcher = connection.play('../track');
+        dispatcher = connection.play('../track',  {bitrate: 256000 /* 192kbps */});
         dispatcher.on('start', () => {
             message.channel.send(`Playing ${respJson['track']}`);
             console.log('Music is Playing');

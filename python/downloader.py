@@ -9,7 +9,7 @@ def download_track(URL):
     path = path.split('/')
     path[len(path)-1] = "track"
     path = '/'.join(path)
-    
+    print(path)
 
     print(f'Getting {URL}')
     try:
@@ -17,7 +17,8 @@ def download_track(URL):
     except FileNotFoundError:
         pass
     video = pafy.new(URL)
-    best = video.getbest()
+    best = video.getbestaudio()
+    print(f"Bitrate: {best.bitrate}")
     best.download(filepath=path)
     print(f'{video.title}.{best.extension} downloaded.')
     return video.title
