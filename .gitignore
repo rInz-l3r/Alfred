@@ -4,3 +4,4 @@ track
 __pycache__/
 .vscode
 config.json
+src/music

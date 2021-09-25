@@ -1,25 +1,18 @@
 import pafy
 import os
 import time
-from search_youtube import search
 from sys import argv
+import uuid
 
 def download_track(URL):
-    path = os.getcwd()
-    path = path.split('/')
-    path[len(path)-1] = "track"
-    path = '/'.join(path)
-    print(path)
-
     print(f'Getting {URL}')
-    try:
-        os.remove(path)
-    except FileNotFoundError:
-        pass
+    for f in os.listdir('../src/music/'):
+        os.remove(os.path.join('../src/music/', f))
     video = pafy.new(URL)
     best = video.getbestaudio()
-    print(f"Bitrate: {best.bitrate}")
-    best.download(filepath=path)
+    print(best)
+ 
+    best.download(filepath=f'../src/music/{video.title}')
     print(f'{video.title}.{best.extension} downloaded.')
     return video.title
 

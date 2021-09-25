@@ -3,6 +3,8 @@ import json
 import validators
 import downloader
 
+previous_track = ""
+
 @post('/alfred/track')
 def download_track():
     for word in request.json['link'].split(' '):
@@ -11,7 +13,8 @@ def download_track():
                 track_name = downloader.download_track(word)
                 response.status = 200
                 response.headers['Content-Type'] = 'application/json'
-                return {'track': json.dumps(track_name)}
+                previous_track = track_name
+                return {'track': track_name}
             except OSError:
                 response.status = 404
                 return {}
@@ -24,6 +27,14 @@ def track_name():
             response.status = 200
             response.headers['Content-Type'] = 'application/json'
             return {'track': json.dumps(track_name)}
+
+
+@get('/alfred/alive')
+def alive():
+    response.status = 200
+    response.headers['Content-Type'] = 'application/json'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return {'status': 'Online'}
 
 # Disconnected
 # @post('/alfred/search')

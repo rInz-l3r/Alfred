@@ -5,8 +5,23 @@ isPlaying = false;
 connection = false;
 dispatcher = false;
 
+async function verifyAvailable(identifier, managerPath){
+    console.log(" ## I am free for jobs...")
+    let resp = await fetch(managerPath+"/manager/available", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            "instance": identifier
+            },
+        )});
+    if (resp.status === 200){
+        return true;
+    };
+    return false;
+}
+
 // entry point to playing audio
-async function play(message){
+async function play(message, identifer, managerPath){
     if (isPlaying){
         trackName = await getTrackName(message.content)
         musicQueue.push(message);
@@ -14,24 +29,25 @@ async function play(message){
         console.log(`Adding ${trackName} to the queue.`)
     } else {
         connection = await message.member.voice.channel.join();
-        await playTrack(message, connection, await download(message.content))
+        await playTrack(message, connection, identifer, managerPath, await download(message.content))
     };
     return true;
     
 }
 
 // stopping all music, clearing queue.
-async function stop(message){
+async function stop(message, identifier, managerPath){
     musicQueue = [];
     connection.disconnect();
     isPlaying = false;
-    message.channel.send("Queue Cleared.");
+    message.channel.send(`Alfred#${identifier} disconnecting...`);
     console.log("Queue Cleared.")
+    await verifyAvailable(identifier, managerPath)
 };
 
 // skipping track, calling next track
-async function skip(message){
-    nextTrack(message, connection);
+async function skip(message, identifier){
+    nextTrack(message, connection, identifier);
 };
 
 // pause track
@@ -71,18 +87,20 @@ async function getTrackName(content){
 
 // connect to message originating guild channel, play if 200 status from
 // python downloader.
-async function playTrack(message, connection, resp) {
+async function playTrack(message, connection, identifier, managerPath, resp) {
     console.log(process.cwd())
     if (resp.status == 200) {
         respJson = await resp.json()
-        dispatcher = connection.play('../track',  {bitrate: 256000 /* 192kbps */});
+        track = respJson['track']
+        console.log(`playing ${track}`)
+        dispatcher = connection.play(`music/${track}`,  {bitrate: 256000 /* 192kbps */});
         dispatcher.on('start', () => {
-            message.channel.send(`Playing ${respJson['track']}`);
+            message.channel.send(`Alfred#${identifier} playing ${respJson['track']}`);
             console.log('Music is Playing');
             isPlaying = true;
         });
         dispatcher.on('finish', async () => {
-            await nextTrack(message, connection)
+            await nextTrack(message, connection, identifier, managerPath)
         });
     } else {
         dispatcher = connection.play('audio/error.mp3')
@@ -91,24 +109,27 @@ async function playTrack(message, connection, resp) {
             isPlaying = true;
         });
         dispatcher.on('finish', async () => {
-            await nextTrack(message, connection)
+            await nextTrack(message, connection, identifier, managerPath)
         });
     };
 };
 
 // check music queue length, if there is another track to play download
 // it and play it.
-async function nextTrack(message, connection) {
+async function nextTrack(message, connection, identifier, managerPath) {
     if (musicQueue.length != 0) {
         console.log('songs exist in queue');
         let nextTrack = musicQueue[0];
         musicQueue.splice(0,1);
-        await playTrack(message, connection, await download(nextTrack.content));
+        // !!! Need to fix to actually display track name !!!
+        message.channel.send(`Alfred#${identifier} attempting to fetch track in queue.`);
+        await playTrack(message, connection, identifier, managerPath, await download(nextTrack.content));
     } else {
         console.log('queue is clear');
-        isPlaying = false;
-        connection.disconnect();
+        stop(message, identifier, managerPath)
     };
 };
+
+
 
 module.exports = {play, stop, skip, pause, resume};
