@@ -2,13 +2,16 @@ const MusicManager = require("./musicManager")
 const fetch = require('node-fetch');
 
 class ActionHandler {
-    #args = [
+    #multiArgs = [
         'aplay', 
+        ];
+
+    #singleArgs =[
         'astop', 
         'askip', 
         'apause', 
         'aresume'
-        ];
+    ]
 
     
     // starting bot, getting musicManager
@@ -32,19 +35,24 @@ class ActionHandler {
 
     // making sure we dont have multiple commands in one message
     deconflict(message){
-        let count = 0;
-        // removing messages from bot
-        if (message.author.bot != true) {
-            for (const e in this.#args){
-                if (message.content.includes(this.#args[e])){
-                    count++                
-                };
-    
-            };
-        if (count = 1){
-            return true
-            };
-        return false
+
+        // if the message doesnt come from the bot...
+        if (message.author.bot != true){
+
+            let params = message.content.split(' ');
+         
+            for (const p of params){
+                if (this.#singleArgs.includes(p) && params.length == 1){
+                    console.log("Meets SingleArg Requirements")
+                    return true;
+                }
+                if (this.#multiArgs.includes(p) && params.length > 1) {
+                    console.log("Meets MultiArg Requirements")
+                    return true;
+                }
+            }
+        } else {
+            return false
         }
     }
 
