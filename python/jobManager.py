@@ -25,7 +25,7 @@ def giveJob():
         # If the requesting instance is available
         if alfreds.get(incoming_instance) == True:
             alfreds[incoming_instance] = incoming_guild
-            print("!!! New Channel Assignment !!!")
+            print("!!! New Guild Assignment !!!")
             print(json.dumps(alfreds, indent=2))
             response.status = 200
             return {}
