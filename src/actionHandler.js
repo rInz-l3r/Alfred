@@ -38,17 +38,23 @@ class ActionHandler {
 
         // if the message doesnt come from the bot...
         if (message.author.bot != true){
-
+            // tokenize for iteration
             let params = message.content.split(' ');
-         
-            for (const p of params){
-                if (this.#singleArgs.includes(p) && params.length == 1){
-                    console.log("Meets SingleArg Requirements")
-                    return true;
-                }
-                if (this.#multiArgs.includes(p) && params.length > 1) {
-                    console.log("Meets MultiArg Requirements")
-                    return true;
+
+            // check the first arg to reduce iteration
+            if (this.#multiArgs.includes(params[0]) || this.#singleArgs.includes(params[0])){
+                // iterate through the args
+                for (const p of params){
+                    // if a single command
+                    if (this.#singleArgs.includes(p) && params.length == 1){
+                        console.log("Meets SingleArg Requirements")
+                        return true;
+                    }
+                    // if a command that requires additional information
+                    if (this.#multiArgs.includes(p) && params.length > 1) {
+                        console.log("Meets MultiArg Requirements")
+                        return true;
+                    }
                 }
             }
         } else {
