@@ -2,7 +2,7 @@ const discord = require('discord.js');
 const client = new discord.Client();
 const ActionHandler = require("./actionHandler");
 const fetch = require('node-fetch');
-const { v1: uuidv1 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 async function run(identifier) {
     IP = "http://localhost:"
@@ -21,4 +21,4 @@ async function run(identifier) {
 
 }
 
-run(uuidv1())
+run(uuidv4().split('-')[0])
