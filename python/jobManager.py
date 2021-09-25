@@ -31,6 +31,7 @@ def giveJob():
             return {}
         # If the requesting instance is unavailable
         else:
+            print("Instance Unavailable")
             response.status = 401
             return {}
 
@@ -40,6 +41,7 @@ def giveJob():
             response.status = 200
             return {}
         else:
+            print("Instance is Busy")
             response.status = 401
             return {}
 
@@ -49,7 +51,7 @@ def giveJob():
     req = request.json
     incoming_instance = req.get('instance')
     alfreds[incoming_instance] = True
-    print(f' !!! {incoming_instance} available.')
+    print(f' !!! {incoming_instance} available !!!')
     response.status = 200
     print(json.dumps(alfreds, indent=2))
     return {}

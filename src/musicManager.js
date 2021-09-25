@@ -40,7 +40,6 @@ async function stop(message, identifier, managerPath){
     musicQueue = [];
     connection.disconnect();
     isPlaying = false;
-    message.channel.send(`Alfred#${identifier} disconnecting...`);
     console.log("Queue Cleared.")
     await verifyAvailable(identifier, managerPath)
 };
