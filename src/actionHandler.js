@@ -13,13 +13,11 @@ class ActionHandler {
         'aresume'
     ]
 
+    #managers = []
+
     
     // starting bot, getting musicManager
-    constructor(client, identifer, IP, PORT){
-        this.managerIp = IP;
-        this.managerPort = PORT;
-        this.identifier = identifer
-        this.musicManager = MusicManager;
+    constructor(client){
         this.bot = client;
         this.bot.login(process.env['ALFRED_TOKEN']);
         this.bot.once('ready', () => {
@@ -62,47 +60,36 @@ class ActionHandler {
         }
     }
 
-    async verifyjob(message){
-        console.log(" ## Checking job...")
-        let path = this.managerIp+this.managerPort
-        console.log(`Checking Path ${path}`)
-        let resp = await fetch(path+"/manager/job", {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                "instance": this.identifier,
-                "guild": message.member.guild.id},
-            )});
-        if (resp.status === 200){
-            return true;
-        }
+    async createMusicManager(message){
+        console.log(`Creating new MusicManager for ${message.member.guild.id}`)
+        let manager = new MusicManager(message.member.guild.id, message)
+        manager.handle(message);
+        this.#managers.push(manager)
     }
 
 
     // handling messages based on content
     async handle(message){
-        let resp = await this.verifyjob(message);
-        console.log(resp)
-        if (resp){
-            if (message.content.includes('aplay')){
-                await this.musicManager.play(message, this.identifier, this.managerIp+this.managerPort);
+        let manager = '';
+        // check if there are managers
+        if (this.#managers.length > 0){
+            // if there are managers, check and see if there is one for the guild
+            for (let i = 0; i < this.#managers.length; i++) {
+                if (this.#managers[i].getGuild() == message.member.guild.id){
+                    manager = this.#managers[i]
+                    console.log(`${manager.getID()} is associated with ${manager.getGuild()}`)
+                }
+            }
+
+            if (manager != '') {
+                console.log('Sending Command!')
+                manager.handle(message);
+            } else {
+                this.createMusicManager(message);
             };
-            if (message.content.includes('astop')){
-                await this.musicManager.stop(message, this.identifier, this.managerIp+this.managerPort);
-            };
-    
-            if (message.content.includes('askip')){
-                await this.musicManager.skip(message, this.identifier);
-            };
-    
-            if (message.content.includes('apause')){
-                await this.musicManager.pause();
-            };
-    
-            if (message.content.includes('aresume')){
-                await this.musicManager.resume();
-            };
-        }
+        } else {
+            this.createMusicManager(message);
+        };
     };
 };
 
