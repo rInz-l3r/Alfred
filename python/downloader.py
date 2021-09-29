@@ -6,13 +6,13 @@ import uuid
 
 def download_track(URL):
     print(f'Getting {URL}')
-    for f in os.listdir('../src/music/'):
-        os.remove(os.path.join('../src/music/', f))
+    for f in os.listdir('src/music/'):
+        os.remove(os.path.join('src/music/', f))
     video = pafy.new(URL)
     best = video.getbestaudio()
     print(best)
  
-    best.download(filepath=f'../src/music/{video.title}')
+    best.download(filepath=f'src/music/{video.title}')
     print(f'{video.title}.{best.extension} downloaded.')
     return video.title
 

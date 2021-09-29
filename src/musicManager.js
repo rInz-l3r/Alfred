@@ -95,11 +95,13 @@ class MusicManager {
     // python downloader.
     async playTrack(message, resp) {
         console.log(process.cwd())
+        console.log(`Resp from server is ${resp.status}`)
         if (resp.status == 200) {
+            
             let respJson = await resp.json()
             let track = respJson['track']
             console.log(`playing ${track}`)
-            this.#dispacher = this.#connection.play(`music/${track}`,  {bitrate: 256000 /* 192kbps */});
+            this.#dispacher = this.#connection.play(`src/music/${track}`,  {bitrate: 256000 /* 192kbps */});
             this.#dispacher.on('start', () => {
                 message.channel.send(`Alfred#${this.getID()} playing ${respJson['track']}`);
                 console.log('Music is Playing');

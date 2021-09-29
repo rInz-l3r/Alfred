@@ -9,15 +9,15 @@ previous_track = ""
 def download_track():
     for word in request.json['link'].split(' '):
         if validators.url(word):
-            try:
-                track_name = downloader.download_track(word)
-                response.status = 200
-                response.headers['Content-Type'] = 'application/json'
-                previous_track = track_name
-                return {'track': track_name}
-            except OSError:
-                response.status = 404
-                return {}
+            # try:
+            track_name = downloader.download_track(word)
+            response.status = 200
+            response.headers['Content-Type'] = 'application/json'
+            previous_track = track_name
+            return {'track': track_name}
+            # except OSError:
+            #     response.status = 404
+            #     return {}
                 
 @post('/alfred/trackname')
 def track_name():

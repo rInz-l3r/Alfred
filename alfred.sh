@@ -1,3 +1,3 @@
 #! /bin/bash
 cd alfred/
-python3 python/resources.py & node src/alfred.js
+node src/Alfred.js & python3 python/resources.py
