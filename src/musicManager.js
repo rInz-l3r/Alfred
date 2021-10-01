@@ -111,7 +111,7 @@ class MusicManager {
                 await this.nextTrack(message)
             });
         } else {
-            this.#dispacher = this.#connection.play('audio/error.mp3')
+            this.#dispacher = this.#connection.play('src/audio/error.mp3')
             this.#dispacher.on('start', () => {
                 console.log('Error');
                 this.#isPlaying = true;
